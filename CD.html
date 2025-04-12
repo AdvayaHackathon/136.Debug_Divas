@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Mentorship & Career Discovery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #3aafa9;
+      --dark: #17252a;
+      --light: #def2f1;
+      --bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --text: #222;
+      --section-accent: #52ab98;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: var(--light);
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    nav button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    nav button:hover {
+      background-color: #2b7a78;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem 1rem;
+    }
+
+    section {
+      display: none;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    ul {
+      margin-top: 0.5rem;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    /* Mentor Matching Specific Styles */
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .criteria-card {
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+      border-left: 4px solid var(--primary);
+    }
+    
+    .process-step {
+      display: flex;
+      margin-bottom: 15px;
+      align-items: flex-start;
+    }
+    
+    .step-number {
+      background-color: var(--primary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    
+    .monitoring-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .monitoring-item:before {
+      content: "✓";
+      color: #27ae60;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    .mentor-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    
+    .mentor-btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    select {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    /* Mentor Profiles Grid */
+    .mentor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    
+    .mentor-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    .mentor-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .mentor-img {
+      height: 180px;
+      background-color: #eee;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .mentor-info {
+      padding: 20px;
+    }
+    
+    .mentor-name {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    
+    .mentor-title {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .mentor-specialty {
+      background-color: var(--light);
+      color: var(--dark);
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+    
+    .mentor-bio {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    
+    .connect-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-top: 15px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    
+    .connect-btn:hover {
+      background-color: #2b7a78;
+    }
+    
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .filter-btn {
+      background-color: white;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 5px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* Localized Content Styles */
+    .local-section {
+      background: var(--card-bg);
+      padding: 20px;
+      margin-top: 20px;
+      border-left: 5px solid var(--section-accent);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .local-section h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .local-section p {
+      margin: 5px 0;
+    }
+
+    .resource-link {
+      display: block;
+      margin: 10px 0;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .success-story {
+      background-color: #f0f8ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+    }
+
+    /* Language Content Styles */
+    .language-content {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .language-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    
+    .language-tab {
+      padding: 8px 15px;
+      background: #eee;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .language-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .language-text {
+      display: none;
+    }
+    
+    .language-text.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Digital Mentorship & Career Discovery</h1>
+    <p>Platform for Rural Students</p>
+  </header>
+
+  <nav>
+    <button onclick="showSection('career')">Career Discovery Tool</button>
+    <button onclick="showSection('resources')">Resource Sharing</button>
+    <button onclick="showSection('mentors')">Mentor Matching</button>
+    <button onclick="showSection('skills')">Skill Development</button>
+    <button onclick="showSection('local')">Localized Content</button>
+  </nav>
+
+  <main>
+    <!-- Career Discovery Section -->
+    <section id="career" class="active">
+      <div class="card">
+        <h2>Career Discovery Tool</h2>
+        <p>Select your interests to see potential career paths:</p>
+        <select onchange="showCareerSuggestion(this.value)">
+          <option value="">-- Choose an interest --</option>
+          <option value="tech">Technology</option>
+          <option value="art">Art & Design</option>
+          <option value="agri">Agriculture</option>
+          <option value="medical">Medical</option>
+          <option value="science">Science</option>
+          <option value="commerce">Commerce</option>
+          <option value="gov">Government/Defence</option>
+          <option value="vocational">Vocational Courses</option>
+        </select>
+        <p id="career-result" style="margin-top: 1rem;"></p>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="card">
+        <h2>Resource Sharing</h2>
+        <p>Explore these helpful resources:</p>
+        <ul>
+          <li><a href="https://www.sdseed.in/docs/Career%20Handbook.pdf" target="_blank" download>Career Tips Guide (PDF)</a></li>
+          <li><a href="https://mu.ac.in/wp-content/uploads/2021/07/Soft-Skills-Development.pdf" target="_blank" download>Soft Skills Development (PDF)</a></li>
+          <li><a href="https://www.msudenver.edu/wp-content/uploads/2024/01/STEM-Career-Planning-Guide.pdf" target="_blank" download>STEM Career Guide (PDF)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=P2YIwlkUW58&list=PLp7gmFJpNgC2jEHpn7mi0dL2CyxhBDYBG" target="_blank">Exploring Careers in Technology (Video)</a></li>
+          <li><a href="https://www.youtube.com/watch?v=TvD6qnVe4cI" target="_blank">Introduction to Career Planning (Video)</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Mentor Matching Section -->
+    <section id="mentors">
+      <div class="card">
+        <h2>Mentor Matching System</h2>
+        <p>Connect with qualified professionals who can guide your career journey</p>
+        
+        <div class="filter-controls">
+          <button class="filter-btn active" onclick="filterMentors('all')">All Mentors</button>
+          <button class="filter-btn" onclick="filterMentors('technology')">Technology</button>
+          <button class="filter-btn" onclick="filterMentors('agriculture')">Agriculture</button>
+          <button class="filter-btn" onclick="filterMentors('healthcare')">Healthcare</button>
+          <button class="filter-btn" onclick="filterMentors('business')">Business</button>
+          <button class="filter-btn" onclick="filterMentors('vocational')">Vocational</button>
+        </div>
+        
+        <div class="mentor-grid" id="mentorContainer">
+          <!-- Mentor profiles will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="btn-container">
+          <button class="mentor-btn" onclick="alert('Redirecting to mentor application form...')">Become a Mentor</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skill Development Section -->
+    <section id="skills">
+      <div class="card">
+        <h2>Skill Development</h2>
+        <p>Download these PDFs:</p>
+        <ul>
+          <li><a href="https://www.srcc.edu/sites/default/files/CAB%20UNIT%201.pdf" download>Basic Computing Skills</a></li>
+          <li><a href="https://www.fao.org/fileadmin/templates/nr/sustainability_pathways/docs/Compilation_techniques_organic_agriculture_rev.pdf" download>Agriculture Training Resources</a></li>
+          <li><a href="https://www.msuniv.ac.in/images/distance%20education/learning%20materials/ug%20pg%202023/ug%202021/BA%20english%202023/sy_2324_ug2021_baenglish2023_2_PublicSpeaking_Skills.pdf" download>Public Speaking Skills</a></li>
+          <li><a href="https://www.dol.gov/sites/dolgov/files/odep/topics/youth/softskills/teamwork.pdf" download>Teamwork Basics</a></li>
+          <li><a href="https://books.google.td/books?id=Z6-EODTVTF0C&printsec=copyright&hl=fr#v=onepage&q&f=false" download>Introduction to Architecture</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Enhanced Localized Content Section -->
+    <section id="local">
+      <div class="card">
+        <h2>Localized Content</h2>
+        
+        <div class="local-section">
+          <h3>1. Regional Language Support</h3>
+          <p>Read career guidance in your preferred language:</p>
+          
+          <div class="language-content">
+            <div class="language-tabs">
+              <div class="language-tab active" onclick="showLanguage('hindi')">Hindi</div>
+              <div class="language-tab" onclick="showLanguage('tamil')">Tamil</div>
+              <div class="language-tab" onclick="showLanguage('telugu')">Telugu</div>
+              <div class="language-tab" onclick="showLanguage('bengali')">Bengali</div>
+              <div class="language-tab" onclick="showLanguage('marathi')">Marathi</div>
+              <div class="language-tab" onclick="showLanguage('kannada')">Kannada</div>
+            </div>
+            
+            <div id="hindi" class="language-text active">
+              <h4>करियर सलाह:</h4>
+              <p>नमस्कार छात्रों, यह समय है आपका भविष्य बनाने का।
+                प्रौद्योगिकी, कृषि, चिकित्सा, वाणिज्य और कला जैसे क्षेत्रों में अनेक अवसर मौजूद हैं।
+                अपनी रुचियों को पहचानिए, मुफ्त ऑनलाइन या ऑफलाइन संसाधनों का उपयोग कीजिए और मार्गदर्शन प्राप्त कीजिए।
+                हर छात्र के लिए एक सफल करियर संभव है – बस आगे बढ़िए और ईमानदारी से प्रयास कीजिए।</p>
+            </div>
+            
+            <div id="tamil" class="language-text">
+              <h4>வாழ்க்கை வழிகாட்டுதல்:</h4>
+              <p>
+
+                தமிழ் மொழிபெயர்ப்பு:
+                
+                > வணக்கம் மாணவ மாணவியர்களே, உங்கள் எதிர்காலத்தை உருவாக்க இது சரியான நேரம்.
+                தொழில்நுட்பம், விவசாயம், மருத்துவம், வர்த்தகம் மற்றும் கலைகள் போன்ற பல துறைகளில் வாய்ப்புகள் நிறைந்துள்ளன.
+                உங்கள் ஆர்வத்தை கண்டறிந்து, இலவச ஆன்லைன் அல்லது ஆஃப்லைன் வளங்களை பயன்படுத்தி வழிகாட்டுதலை பெறுங்கள்.
+                ஒவ்வொரு மாணவருக்கும் வெற்றிகரமான தொழில்முனைவு சாத்தியமே – முன்வருங்கள், நேர்மையாக முயற்சி செய்யுங்கள்.
+                
+           </p>
+            </div>
+            
+            <div id="telugu" class="language-text">
+              <h4>కెరీయర్ సలహాలు:</h4>
+              <p>
+
+                తెలుగు అనువాదం:
+                
+                > నమస్కారం విద్యార్థులారా, ఇది మీ భవిష్యత్తును నిర్మించుకునే సమయం.
+                సాంకేతిక విజ్ఞానం, వ్యవసాయం, వైద్య శాస్త్రం, వాణిజ్యం మరియు కళల వంటి రంగాలలో అనేక అవకాశాలు ఉన్నాయి.
+                మీ ఆసక్తిని గుర్తించండి, ఉచిత ఆన్‌లైన్ లేదా ఆఫ్‌లైన్ వనరులను ఉపయోగించండి మరియు మార్గదర్శనం పొందండి.
+                ప్రతి విద్యార్థికి విజయవంతమైన కెరీర్ సాధ్యం – ముందుకు సాగండి మరియు నిజాయితీగా ప్రయత్నించండి.
+                
+                
+        </p>
+            </div>
+            
+            <div id="bengali" class="language-text">
+              <h4>ক্যারিয়ার পরামর্শ:</h4>
+              <p>
+
+                বাংলা অনুবাদ:
+                
+                > নমস্কার ছাত্রছাত্রীরা, এখনই আপনার ভবিষ্যৎ গড়ে তোলার সময়।
+                প্রযুক্তি, কৃষি, চিকিৎসা, বাণিজ্য এবং শিল্পকলা সহ বিভিন্ন ক্ষেত্রে অসংখ্য সুযোগ রয়েছে।
+                আপনার আগ্রহ চিহ্নিত করুন, বিনামূল্যে অনলাইন বা অফলাইন সম্পদের ব্যবহার করুন এবং সঠিক দিকনির্দেশনা গ্রহণ করুন।
+                প্রত্যেক শিক্ষার্থীর জন্য একটি সফল কর্মজীবন সম্ভব – শুধু এগিয়ে যান এবং সততার সঙ্গে চেষ্টা চালিয়ে যান।
+                
+                
+                
+               </p>
+            </div>
+            
+            <div id="marathi" class="language-text">
+              <h4>करिअर सल्ला:</h4>
+              <p>> 
+
+                मराठी अनुवाद:
+                
+                > नमस्कार विद्यार्थ्यांनो, तुमचं भविष्य घडवण्याची हीच योग्य वेळ आहे.
+                तंत्रज्ञान, शेती, वैद्यकीय, वाणिज्य आणि कला क्षेत्रामध्ये असंख्य संधी उपलब्ध आहेत.
+                तुमची आवड ओळखा, मोफत ऑनलाइन किंवा ऑफलाइन स्रोतांचा उपयोग करा आणि योग्य मार्गदर्शन मिळवा.
+                प्रत्येक विद्यार्थ्याला यशस्वी करिअर मिळवता येऊ शकतं – पुढे या आणि प्रामाणिक प्रयत्न करा.
+
+                </p>
+            </div>
+            
+            <div id="kannada" class="language-text">
+              <h4>ವೃತ್ತಿ ಸಲಹೆ:</h4>
+              <p>ನಮಸ್ಕಾರ ವಿದ್ಯಾರ್ಥಿಗಳೇ, ನಿಮ್ಮ ಭವಿಷ್ಯ ರೂಪಿಸುವ ಸಮಯ ಇದು. 
+                ತಂತ್ರಜ್ಞಾನ, ಕೃಷಿ, ವೈದ್ಯಕೀಯ, ವಾಣಿಜ್ಯ, ಹಾಗೂ ಕಲೆಗಳ ಕ್ಷೇತ್ರಗಳಲ್ಲಿ ಅನೇಕ ಅವಕಾಶಗಳಿವೆ.
+                ನಿಮ್ಮ ಆಸಕ್ತಿಯನ್ನು ಗುರುತಿಸಿ, ಉಚಿತ ಆನ್ಲೈನ್ ಅಥವಾ ಆಫ್‌ಲೈನ್ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಉಪಯೋಗಿಸಿ ಮತ್ತು ಮಾರ್ಗದರ್ಶನ ಪಡೆಯಿರಿ.
+                ಪ್ರತಿಯೊಬ್ಬ ವಿದ್ಯಾರ್ಥಿಗೂ ಯಶಸ್ವಿ ವೃತ್ತಿಜೀವನ ಸಾಧ್ಯವಾಗಿದೆ – ಅದಕ್ಕಾಗಿ ಮುನ್ನಡೆದಿರಿ ಮತ್ತು ಪ್ರಾಮಾಣಿಕವಾಗಿ ಪ್ರಯತ್ನಿಸಿ.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="local-section">
+          <h3>2. Local Career Opportunities</h3>
+          <ul>
+            <li>Agriculture and farming-based jobs</li>
+            <li>Handicrafts, tailoring, local trades</li>
+            <li>Nearby government job options</li>
+          </ul>
+          <div class="success-story">
+            <strong>Success Story:</strong> Ramesh from nearby village doubled his income through organic farming
+          </div>
+        </div>
+
+        <div class="local-section">
+          <h3>3. Government Schemes & Scholarships</h3>
+          <ul>
+            <li>Free training programs (PMKVY, DDU-GKY)</li>
+            <li>Educational loans with low interest</li>
+            <li>Subsidies for small businesses</li>
+          </ul>
+          <a href="#" class="https://ebiz.karnataka.gov.in/kum/PDFS/COMMON%20APPLICATION%20FORM%20AND%20OTHER%20FORMS%20AND%20INSTRUCTIONS.pdf">📋 Download local scheme application forms</a>
+        </div>
+
+        <div class="local-section">
+          <h3>4. Nearby Training Centers</h3>
+          <ul>
+            <li><strong>ITI Center:</strong> 15km away, offers welding and electrician courses</li>
+            <li><strong>Polytechnic College:</strong> Free seats for rural students</li>
+            <li><strong>Digital Literacy Camp:</strong> Starting next month at Panchayat office</li>
+          </ul>
+        </div>
+
+        <div class="local-section">
+          <h3>5. Local Mentors & Support</h3>
+          <ul>
+            <li>Farmers using modern techniques</li>
+            <li>Small business owners willing to guide</li>
+            <li>Government school toppers sharing study tips</li>
+          </ul>
+          <button class="mentor-btn" style="margin-top: 10px;">Connect with Local Mentor</button>
+        </div>
+
+        <div class="local-section">
+          <h3>6. Offline Access</h3>
+          <ul>
+            <li>Download all resources for offline use</li>
+            <li>SMS "CAREER" to 1925 for job alerts</li>
+            <li>Visit Panchayat office for printed guides</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made for Rural Empowerment | Helpline: 1800-XXX-XXXX
+  </footer>
+
+  <script>
+    // Sample mentor data with specialties
+    const mentors = [
+      {
+        id: 1,
+        name: "Dr. Priya Sharma",
+        title: "Agricultural Scientist",
+        specialty: ["Agriculture", "Organic Farming", "Rural Development"],
+        bio: "15 years experience in sustainable farming practices. Specializes in helping rural students explore agricultural careers.",
+        img: "https://images.unsplash.com/photo-1581093450021-4a7360e9a0a4?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 2,
+        name: "Rajesh Kumar",
+        title: "Software Engineer",
+        specialty: ["Technology", "Programming", "AI"],
+        bio: "Senior developer at a tech company with 10+ years experience. Passionate about mentoring students from rural backgrounds.",
+        img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 3,
+        name: "Ananya Patel",
+        title: "Medical Doctor",
+        specialty: ["Healthcare", "Medicine", "Public Health"],
+        bio: "Practicing physician with special interest in rural healthcare. Can guide students about medical careers.",
+        img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 4,
+        name: "Vikram Singh",
+        title: "Business Consultant",
+        specialty: ["Business", "Finance", "Entrepreneurship"],
+        bio: "Helped launch 50+ rural startups. Excited to mentor future business leaders.",
+        img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 5,
+        name: "Sunita Reddy",
+        title: "Vocational Trainer",
+        specialty: ["Vocational", "Handicrafts", "Small Business"],
+        bio: "20 years experience in vocational education. Specializes in traditional crafts and small business development.",
+        img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 6,
+        name: "Arjun Mehta",
+        title: "Renewable Energy Expert",
+        specialty: ["Technology", "Sustainability", "Rural Energy"],
+        bio: "Works on solar solutions for rural areas. Can guide students about green energy careers.",
+        img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 7,
+        name: "Dr. Neha Gupta",
+        title: "Veterinary Doctor",
+        specialty: ["Agriculture", "Animal Husbandry", "Veterinary"],
+        bio: "Specializes in livestock health. Passionate about helping rural students enter veterinary medicine.",
+        img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60"
+      },
+      {
+        id: 8,
+        name: "Sanjay Verma",
+        title: "IT Trainer",
+        specialty: ["Technology", "Digital Skills", "Rural Tech"],
+        bio: "Focuses on bringing digital literacy to rural youth. 8 years training experience.",
+        img: "https://images.unsplash.com/photo-1542103749-8ef59b94f47e?w=500&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    // Display mentors on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      displayMentors(mentors);
+    });
+
+    // Display all mentors
+    function displayMentors(mentorsToDisplay) {
+      const container = document.getElementById('mentorContainer');
+      container.innerHTML = '';
+      
+      mentorsToDisplay.forEach(mentor => {
+        const card = document.createElement('div');
+        card.className = 'mentor-card';
+        card.innerHTML = `
+          <div class="mentor-img" style="background-image: url('${mentor.img}')"></div>
+          <div class="mentor-info">
+            <h3 class="mentor-name">${mentor.name}</h3>
+            <p class="mentor-title">${mentor.title}</p>
+            <div>
+              ${mentor.specialty.map(spec => `<span class="mentor-specialty">${spec}</span>`).join('')}
+            </div>
+            <p class="mentor-bio">${mentor.bio}</p>
+            <button class="connect-btn" onclick="connectWithMentor(${mentor.id})">Connect</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filter mentors by specialty
+    function filterMentors(specialty) {
+      // Update active filter button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      if (specialty === 'all') {
+        displayMentors(mentors);
+      } else {
+        const filtered = mentors.filter(mentor => 
+          mentor.specialty.some(s => s.toLowerCase().includes(specialty))
+        );
+        displayMentors(filtered);
+      }
+    }
+
+    // Connect with mentor function
+    function connectWithMentor(mentorId) {
+      const mentor = mentors.find(m => m.id === mentorId);
+      alert(`Connection request sent to ${mentor.name}. They will contact you soon!`);
+    }
+
+    // Show selected language content
+    function showLanguage(lang) {
+      // Update active tab
+      document.querySelectorAll('.language-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Show selected language content
+      document.querySelectorAll('.language-text').forEach(text => {
+        text.classList.remove('active');
+      });
+      document.getElementById(lang).classList.add('active');
+    }
+
+    // Tab switching function
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      
+      // If showing mentors section, ensure it's properly filtered
+      if (id === 'mentors') {
+        filterMentors('all');
+      }
+    }
+
+    // Career suggestion function
+    function showCareerSuggestion(interest) {
+      const result = document.getElementById('career-result');
+      const messages = {
+        tech: "Explore careers like Software Developer, AI Specialist, Robotics Engineer, and Cybersecurity Analyst.",
+        art: "Pursue Animation, Graphic Design, Fashion Design, and Event Planning.",
+        agri: "Consider Agricultural Research, Organic Farming, Livestock Management, and Agri-Tech Solutions.",
+        medical: "Look into becoming a Nurse, Pharmacist, Lab Technician, or Radiology Expert.",
+        science: "Explore careers in Physics, Chemistry, Biology, Environmental Science, and Data Analytics.",
+        commerce: "Learn Accounting, Financial Analysis, Marketing, and Investment Banking.",
+        gov: "Prepare for Defence roles like NDA Cadet, Police Officer, Firefighter, and Forest Ranger.",
+        vocational: "Train in Electrician Work, Plumbing, Tailoring, Carpentry, and Automotive Repair."
+      };
+
+      result.textContent = messages[interest] || "Please select an interest to view career options.";
+    }
+  </script>
+
+</body>
+</html>
